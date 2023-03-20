@@ -94,6 +94,7 @@ const idVerfication = (req, res, next) => {
 //rota post/order responsável por criar os pedidos
 
 app.post('/order', orderVerification, (req, res) => {
+    try{
     const { order, price } = req.orderFind
     const { clientName } = req.body
 
@@ -101,6 +102,9 @@ app.post('/order', orderVerification, (req, res) => {
     requests.push(orderCreated)
 
     return res.status(201).json(orderCreated)
+    }catch(err){
+        return res.status(500).json({error: err.message})
+    }
 })
 
 
@@ -128,16 +132,19 @@ app.get('/order', (req, res) => {
 //rota que atualiza os pedidos criados 
 
 app.put('/order/:id', idVerfication, orderVerification, (req, res) => {
-    const { order, price } = req.orderFind
-    const { id } = req.params
-    const index = req.indexId
-    const { clientName } = req.body
-    const updateOrder = { id, clientName, order, price, status: "Em preparação..." }
+    try{
+        const { order, price } = req.orderFind
+        const { id } = req.params
+        const index = req.indexId
+        const { clientName } = req.body
+        const updateOrder = { id, clientName, order, price, status: "Em preparação..." }
 
-    requests[index] = updateOrder
+        requests[index] = updateOrder
 
-    res.json(updateOrder)
-
+        res.json(updateOrder)
+    }catch(err){
+        return res.status(500).json({error: err.message})
+    }
 
 })
 
