@@ -12,7 +12,7 @@ app.use(express.json())
 
 
 
-//'banco de dados' cardapio
+//array cardapio
 const menu = [
     {
         order: 'X- Burguer, 1 batata grande, 1 fanta-uva',
@@ -32,18 +32,8 @@ const menu = [
     }
 ]
 
-
-
-
-//banco de dados onde vai armazenar os pedidos
+//array onde vai armazenar os pedidos
 const requests = []
-
-
-
-
-
-
-
 
 //middleware que verifica se o order é igual ao order quem vem do body
 
@@ -59,15 +49,6 @@ const orderVerification = (req, res, next) => {
 
     next()
 }
-
-
-
-
-
-
-
-
-
 
 //middleware que verifica o id do cliente com o id do parametro
 
@@ -85,12 +66,6 @@ const idVerfication = (req, res, next) => {
     next()
 }
 
-
-
-
-
-
-
 //rota post/order responsável por criar os pedidos
 
 app.post('/order', orderVerification, (req, res) => {
@@ -107,12 +82,6 @@ app.post('/order', orderVerification, (req, res) => {
     }
 })
 
-
-
-
-
-
-
 //rota que mostra todos os pedidos criados
 
 app.get('/order', (req, res) => {
@@ -120,14 +89,6 @@ app.get('/order', (req, res) => {
 
     return res.json(requests)
 })
-
-
-
-
-
-
-
-
 
 //rota que atualiza os pedidos criados 
 
@@ -148,13 +109,6 @@ app.put('/order/:id', idVerfication, orderVerification, (req, res) => {
 
 })
 
-
-
-
-
-
-
-
 //rota que deleta algum dos pedidos já feitos
 
 app.delete('/order/:id', idVerfication, (req, res) => {
@@ -167,12 +121,6 @@ app.delete('/order/:id', idVerfication, (req, res) => {
 })
 
 
-
-
-
-
-
-
 //rota que retorna um pedido especifico ja criado
 
 app.get('/order/:id', idVerfication, (req, res) => {
@@ -183,28 +131,21 @@ app.get('/order/:id', idVerfication, (req, res) => {
 
 })
 
-
-
-
-
-
 //rota que altera o status do pedido
 
 app.patch('/order/:id', idVerfication, (req, res) => {
     const index = req.indexId
     requests[index].status = 'Pronto!'
-    const status = requests.filter(request => request.status === 'Pronto!')
 
-    return res.json(status)
+    return res.json({message: "Status Ok!"})
 })
 
+app.get('/order/requests/status', (req,res) =>{
 
+    const requestsStatus = requests.filter(orders => orders.status === 'Pronto!')
 
-
-
-
-
-
+    return res.json(requestsStatus)
+})
 
 app.listen(port, () => console.log('🚀 o server está rodando na porta' + ' ' + port))
 
